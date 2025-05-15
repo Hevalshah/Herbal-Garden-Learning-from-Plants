@@ -18,11 +18,13 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   const [showLabel, setShowLabel] = useState(false);
   
   // Animation for hover effect
-  const { scale, color } = useSpring({
+  const { scale } = useSpring({
     scale: hovered ? [1.1, 1.1, 1.1] : [1, 1, 1],
-    color: hovered ? "#F0E6D2" : plant.color,
     config: { mass: 1, tension: 300, friction: 30 }
   });
+  
+  // Use a regular state for color instead of an animated spring
+  const foliageColor = hovered ? "#F0E6D2" : plant.color || "#4CAF50";
   
   // Gentle sway animation
   useFrame(({ clock }) => {
@@ -65,15 +67,15 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
         <meshStandardMaterial color="#2D4F2D" roughness={0.8} />
       </Cylinder>
       
-      {/* Plant foliage - using animated for hover effect */}
+      {/* Plant foliage - using animated for scale effect but not for color */}
       <animated.mesh
         scale={scale as any}
         position={[0, height, 0]}
         castShadow
       >
         <sphereGeometry args={[0.5 * plantScale, 8, 8]} />
-        <animated.meshStandardMaterial 
-          color={color as any} 
+        <meshStandardMaterial 
+          color={foliageColor} 
           roughness={0.7} 
         />
       </animated.mesh>
