@@ -1,6 +1,5 @@
 
 import { useRef, useState } from "react";
-import { useSpring, animated } from "@react-spring/three";
 import { Plant as PlantType } from "@/data/plants";
 import { Sphere, Cylinder, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -17,13 +16,7 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   const [hovered, setHovered] = useState(false);
   const [showLabel, setShowLabel] = useState(false);
   
-  // Animation for hover effect using a simple approach
-  const springs = useSpring({
-    scale: hovered ? 1.1 : 1,
-    config: { mass: 1, tension: 300, friction: 30 }
-  });
-  
-  // Use a regular state for color instead of an animated spring
+  // Simple state for color instead of animations
   const foliageColor = hovered ? "#F0E6D2" : plant.color || "#4CAF50";
   
   // Gentle sway animation
@@ -41,7 +34,7 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   const height = plant.height || 1;
   const plantScale = plant.scale || 1;
   
-  // Calculate the final scale for use in regular mesh
+  // Calculate final scale based on hover state
   const finalScale = plantScale * (hovered ? 1.1 : 1);
   
   return (
@@ -70,7 +63,7 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
         <meshStandardMaterial color="#2D4F2D" roughness={0.8} />
       </Cylinder>
       
-      {/* Plant foliage - use regular mesh with calculated final scale */}
+      {/* Plant foliage - use regular mesh with manually calculated scale */}
       <mesh
         scale={[finalScale, finalScale, finalScale]}
         position={[0, height, 0]}
