@@ -1,26 +1,29 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+
+import Layout from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+  const navigate = useNavigate();
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <Layout>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-16">
+        <h1 className="text-5xl herbal-title mb-6">404</h1>
+        <h2 className="text-2xl text-herbal-gold mb-4">Page Not Found</h2>
+        <p className="text-herbal-cream/80 mb-8 max-w-md">
+          The plant you're looking for might be in another garden. Let's get you back on the path.
+        </p>
+        <div className="flex gap-4">
+          <Button onClick={() => navigate("/")} variant="default">
+            Return Home
+          </Button>
+          <Button onClick={() => navigate("/garden")} variant="outline">
+            Visit Garden
+          </Button>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
