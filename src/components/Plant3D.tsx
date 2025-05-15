@@ -1,7 +1,7 @@
 
 import { useRef, useState } from "react";
 import { Plant as PlantType } from "@/data/plants";
-import { Sphere, Cylinder, Html } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Group } from "three";
 
@@ -55,18 +55,15 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
       }}
     >
       {/* Plant stem */}
-      <Cylinder
-        args={[0.05 * plantScale, 0.08 * plantScale, height, 8]}
-        position={[0, height / 2, 0]}
-        castShadow
-      >
+      <mesh position={[0, height / 2, 0]} castShadow>
+        <cylinderGeometry args={[0.05 * plantScale, 0.08 * plantScale, height, 8]} />
         <meshStandardMaterial color="#2D4F2D" roughness={0.8} />
-      </Cylinder>
+      </mesh>
       
-      {/* Plant foliage - use regular mesh with manually calculated scale */}
+      {/* Plant foliage */}
       <mesh
-        scale={[finalScale, finalScale, finalScale]}
         position={[0, height, 0]}
+        scale={finalScale}
         castShadow
       >
         <sphereGeometry args={[0.5, 8, 8]} />
