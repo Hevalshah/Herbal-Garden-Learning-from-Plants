@@ -17,8 +17,8 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   const [hovered, setHovered] = useState(false);
   const [showLabel, setShowLabel] = useState(false);
   
-  // Animation for hover effect - only animate scale, not color
-  const springProps = useSpring({
+  // Animation for hover effect using a simple approach
+  const springs = useSpring({
     scale: hovered ? 1.1 : 1,
     config: { mass: 1, tension: 300, friction: 30 }
   });
@@ -40,6 +40,9 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   
   const height = plant.height || 1;
   const plantScale = plant.scale || 1;
+  
+  // Calculate the final scale for use in regular mesh
+  const finalScale = plantScale * (hovered ? 1.1 : 1);
   
   return (
     <group
@@ -67,9 +70,9 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
         <meshStandardMaterial color="#2D4F2D" roughness={0.8} />
       </Cylinder>
       
-      {/* Plant foliage - manually apply scale instead of using animated.mesh */}
+      {/* Plant foliage - use regular mesh with calculated final scale */}
       <mesh
-        scale={[springProps.scale.to(s => s * plantScale), springProps.scale.to(s => s * plantScale), springProps.scale.to(s => s * plantScale)]}
+        scale={[finalScale, finalScale, finalScale]}
         position={[0, height, 0]}
         castShadow
       >
