@@ -4,7 +4,7 @@ import { useSpring, animated } from "@react-spring/three";
 import { Plant as PlantType } from "@/data/plants";
 import { Sphere, Cylinder, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { Mesh, Group } from "three";
+import { Group } from "three";
 
 interface Plant3DProps {
   plant: PlantType;
@@ -17,9 +17,9 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
   const [hovered, setHovered] = useState(false);
   const [showLabel, setShowLabel] = useState(false);
   
-  // Animation for hover effect
-  const { scale } = useSpring({
-    scale: hovered ? [1.1, 1.1, 1.1] : [1, 1, 1],
+  // Animation for hover effect - only animate scale, not color
+  const springProps = useSpring({
+    scale: hovered ? 1.1 : 1,
     config: { mass: 1, tension: 300, friction: 30 }
   });
   
@@ -67,18 +67,18 @@ const Plant3D = ({ plant, onClick, isRaining }: Plant3DProps) => {
         <meshStandardMaterial color="#2D4F2D" roughness={0.8} />
       </Cylinder>
       
-      {/* Plant foliage - using animated for scale effect but not for color */}
-      <animated.mesh
-        scale={scale as any}
+      {/* Plant foliage - manually apply scale instead of using animated.mesh */}
+      <mesh
+        scale={[springProps.scale.to(s => s * plantScale), springProps.scale.to(s => s * plantScale), springProps.scale.to(s => s * plantScale)]}
         position={[0, height, 0]}
         castShadow
       >
-        <sphereGeometry args={[0.5 * plantScale, 8, 8]} />
+        <sphereGeometry args={[0.5, 8, 8]} />
         <meshStandardMaterial 
           color={foliageColor} 
           roughness={0.7} 
         />
-      </animated.mesh>
+      </mesh>
       
       {/* Plant label */}
       {showLabel && (
